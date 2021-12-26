@@ -7,17 +7,19 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class LRUCacheDemo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LRUCacheDemo.class.getName());
+public class CacheDemo {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheDemo.class.getName());
     private static final long CACHE_MAX_SIZE = 10000L;
 
 
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
     private static final Random random = new Random();
+    public static final int FIRST_HUNDRED_ELEMENTS = 100;
+    public static final int MILLIS = 10000;
 
     public static void main(String[] args) throws InterruptedException {
 
-        GuavaCacheLRUImpl cacheDemo = new GuavaCacheLRUImpl(CACHE_MAX_SIZE);
+        GuavaCacheImpl cacheDemo = new GuavaCacheImpl(CACHE_MAX_SIZE);
         cacheDemo.initLoadingCache();
 
         for (int i = 0; i < 20; i++) {
@@ -33,7 +35,7 @@ public class LRUCacheDemo {
         // start to read first 100 elements permanently
         executorService.submit(() -> {
             try {
-                cacheDemo.getCacheIfPresentContinuously((long) random.nextInt(100));
+                cacheDemo.getCacheIfPresentContinuously((long) random.nextInt(FIRST_HUNDRED_ELEMENTS));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -41,7 +43,7 @@ public class LRUCacheDemo {
 
         // wait for random access
         LOGGER.info("Waiting...");
-        Thread.sleep(10000);
+        Thread.sleep(MILLIS);
 
 
         // start to write in parallel

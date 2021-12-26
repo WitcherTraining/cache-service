@@ -2,14 +2,14 @@ package lfu;
 
 import java.util.*;
 
-public class LFUImpl {
+public class CacheImpl {
 
     private final int CAPACITY;
     private final Map<Integer, AccessCounter> META_INFO = new HashMap<>();
     private final Map<Integer, CacheObject> CACHE = new HashMap<>();
     private final List<CacheObject> LOG = new ArrayList<>();
 
-    public LFUImpl(int capacity) {
+    public CacheImpl(int capacity) {
         this.CAPACITY = capacity;
     }
 

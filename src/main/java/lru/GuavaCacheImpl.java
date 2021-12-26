@@ -7,15 +7,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class GuavaCacheLRUImpl {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GuavaCacheLRUImpl.class.getName());
+public class GuavaCacheImpl {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuavaCacheImpl.class.getName());
 
     private final long cacheMaxSize;
     private static final Random random = new Random();
 
     private final Cache<Long, CacheObject> cache;
 
-    public GuavaCacheLRUImpl(final long cacheMaxSize) {
+    public GuavaCacheImpl(final long cacheMaxSize) {
         this.cacheMaxSize = cacheMaxSize;
         this.cache = CacheBuilder.newBuilder()
                 .maximumSize(cacheMaxSize)

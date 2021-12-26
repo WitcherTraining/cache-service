@@ -1,9 +1,9 @@
 package lfu;
 
 class AccessCounter implements Comparable<AccessCounter> {
-    Integer key;
-    Integer countOfRequests;
-    Long lastTimeAccess;
+    protected Integer key;
+    protected Integer countOfRequests;
+    protected Long lastTimeAccess;
 
     public AccessCounter(Integer key, Integer countOfRequests, Long lastTimeAccess) {
         this.key = key;

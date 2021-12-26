@@ -6,9 +6,13 @@ import java.util.concurrent.Executors;
 
 public class CacheDemo {
 
-    private static final LFUImpl CACHE = new LFUImpl(1000);
+    public static final int CAPACITY = 1000;
+    private static final CacheImpl CACHE = new CacheImpl(CAPACITY);
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private static final Random RANDOM = new Random();
+    public static final int MILLIS = 10;
+    public static final int FIRST_HUNDRED_ELEMENTS = 100;
+    public static final int LONG_MILLIS = 5000;
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -23,7 +27,7 @@ public class CacheDemo {
             EXECUTOR_SERVICE.submit(() -> {
                 while (true) {
                     int key = RANDOM.nextInt(CACHE.getCapacity());
-                    Thread.sleep(1000);
+                    Thread.sleep(CAPACITY);
                     CACHE.get(key);
                 }
             });
@@ -31,28 +35,28 @@ public class CacheDemo {
         // start to read first 100 elements permanently
         EXECUTOR_SERVICE.submit(() -> {
             while (true) {
-                Thread.sleep(10);
-                CACHE.get(RANDOM.nextInt(100));
+                Thread.sleep(MILLIS);
+                CACHE.get(RANDOM.nextInt(FIRST_HUNDRED_ELEMENTS));
             }
         });
 
         // wait for random access
         System.out.println("waiting...");
-        Thread.sleep(1000);
+        Thread.sleep(CAPACITY);
 
         // start to write in parallel
         for (int i = 0; i < 2; i++) {
             EXECUTOR_SERVICE.submit(() -> {
                 while (true) {
                     int key = getRandomInt();
-                    Thread.sleep(RANDOM.nextInt(10) * 100);
+                    Thread.sleep(RANDOM.nextInt(MILLIS) * FIRST_HUNDRED_ELEMENTS);
                     CACHE.put(key, new CacheObject("Value" + key));
                 }
             });
         }
 
         while (true) {
-            Thread.sleep(5000);
+            Thread.sleep(LONG_MILLIS);
             System.out.println("Log size = " + CACHE.getLog().size());
         }
     }
